@@ -1,4 +1,4 @@
-# A Short Tutorial on RSEM
+# A Short Tutorial for RSEM
 
 [Bo Li](http://bli25ucb.github.io/)
 
@@ -19,7 +19,7 @@
 
 RSEM<sup>[1](http://bioinformatics.oxfordjournals.org/content/26/4/493.long),[2](http://www.biomedcentral.com/1471-2105/12/323)</sup> is an RNA-Seq transcript quantification program developed in 2009. In this tutorial, we will use some single cell RNA-Seq data from [Shalek *et al.*](http://www.nature.com/nature/journal/v510/n7505/full/nature13437.html) to demonstrate the common uses of RSEM.
 
-The Shalek *et al.* study contains thousands of single cell RNA-Seq experiments from bone-marrow-derived mouse dendritic cells. These data are available at [GSE48968](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE48968). In this tutorial, we will first analyze some paired-end RNA-Seq data from one dendritic cell sequenced 6 hours after lipopolysaccharide (LPS) stimulation. Then we will see how to perform differential expression analysis on two groups of single cells. Lastly, we will show how the RSEM simulator can help the design of sequencing experiments.
+The Shalek *et al.* study contains thousands of single cell RNA-Seq experiments from bone-marrow-derived mouse dendritic cells. These data are available at [GSE48968](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE48968). In this tutorial, we first analyze one paired-end RNA-Seq data set from a single dendritic cell sequenced 6 hours after lipopolysaccharide (LPS) stimulation. Then we demonstrate how to perform differential expression analysis on two groups of single cells. Lastly, we show how we can use the RSEM simulator to help us design sequencing experiments.
 
 <!---
 LPS is a component of Gram-negative bacteria
