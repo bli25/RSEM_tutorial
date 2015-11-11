@@ -85,25 +85,25 @@ RSEM works with a set of transcripts, instead of a genome.  We have two ways to 
  If you want to skip the reference building step, you can download the [prebuilt references](https://www.dropbox.com/s/lixp07odna0wpxn/mouse_ref.tar.gz?dl=0) to `ref` and untar it by typing:
 
  ```
- tar -xzf ref/mouse_ref.tar.gz
+ tar -C ref -xzf ref/mouse_ref.tar.gz
  ```
 
 2. Building references from a set of transcripts. If we only have a *de novo* assembled transcriptome, we have to build references directly from transcripts. In this case, if we want to quantify gene-level expression, we need to provide RSEM a map from isoforms to genes using the `--transcript-to-gene-map` option. RSEM is also able to quantify allele-specific expression. To quantify allele-specific expression, we need to build RSEM references from phased sequences and provide RSEM a map from phased haplotypes to isoforms and then to genes using the `--allele-to-gene-map` option.
 
- Download the extracted mouse transcripts and an associated mapping file from [here](https://www.dropbox.com/s/ie67okalzaw8zzj/mouse_ref_building_from_transcripts.tar.gz?dl=0), copy it to `ref`, and then untar it using the command below.
+ Download [mouse transcripts and the associated mapping file](https://www.dropbox.com/s/ie67okalzaw8zzj/mouse_ref_building_from_transcripts.tar.gz?dl=0) to `ref`, and untar the tarball by
 
  ```
- tar -xzf ref/mouse_ref_building_from_transcripts.tar.gz
+ tar -C ref -xzf ref/mouse_ref_building_from_transcripts.tar.gz
  ```
 
- You should see two files. `mouse_ref.fa` is a multi-FASTA file containing all Ensembl mouse transcripts. `mouse_ref_mapping.txt` is a mapping from transcripts to genes. As shown in the snippet below, in this file, each line consists of a gene_id and a transcript_id.
+ You should see two files: `mouse_ref.fa` and `mouse_ref_mapping.txt`. `mouse_ref.fa` is a multi-FASTA file containing all Ensembl mouse transcripts. Each transcript's identifier is a concatenation of its transcript_id and transcript_name (separated by a '_' sign). `mouse_ref_mapping.txt` is a mapping from transcripts to genes. As shown in the snippet below, each line of the mapping file contains a gene identifier and a transcript identifier.
 
  ![mouse_ref_mapping.txt snippet](images/ref_mapping_snippet.png)
 
  Type the following command to build references from the Ensembl mouse transcripts:
 
  ```
- software/RSEM-1.2.24/rsem-prepare-reference \
+ software/RSEM-1.2.25/rsem-prepare-reference \
  					     --transcript-to-gene-map ref/mouse_ref_mapping.txt \
  					     --bowtie2 --bowtie2-path software/bowtie2-2.2.6 \
 					     ref/mouse_ref.fa ref/mouse_ref 
@@ -126,9 +126,10 @@ It contains around 1 million 101bp-long paired-end reads sequenced from a single
 Then type the following command to run RSEM on this data set. I'll explain the meaning of each option/parameter later. 
 
 ```
-software/RSEM-1.2.24/rsem-calculate-expression -p 8 --paired-end \				
+software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \				
 					--bowtie2 --bowtie2-path software/bowtie2-2.2.6 \
 					--estimate-rspd \
+					--append-names \
 					--output-genome-bam \
 					data/SRR937564_1.fastq data/SRR937564_2.fastq \
 					ref/mouse_ref exp/LPS_6h
