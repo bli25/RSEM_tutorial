@@ -167,7 +167,7 @@ The first two columns of this file give the transcript ID and its parent gene's 
 
 ### Explore the data
 
-First, let us take a look at the highest expressed genes. Please switch to the `exp` subdirectory (`cd exp`) and type the following `R` commands:
+First, let us take a look at the highest expressed genes. Please switch to the `exp` subdirectory (by `cd exp`) and type the following `R` commands:
 
 ```
 data = read.table("LPS_6h.genes.results", header=T, stringsAsFactors=F)
