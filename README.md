@@ -301,11 +301,7 @@ http://ghr.nlm.nih.gov/gene/ITGB2
 
 ### Detecting differentially expressed isoforms
 
-`EBSeq` can also detect differentially expressed isoforms.
-
-Why are we interested in differentially expressed isoforms?
-
-Let us consider this conceptual example: Suppose we have a genes with two isoforms. Compared to the first condition, the first isoform is up-regulated and the second isoform is down-regulated. Thus the net effect might be 0 but in fact both isoforms are differentially expressed. In this case, only conducting gene-level differential expression analyses will be misleading.
+`EBSeq` can also detect differentially expressed isoforms. Why are we interested in differentially expressed isoforms? Let us consider this conceptual example: Suppose we have a genes with two isoforms. Compared to the first condition, the first isoform is up-regulated and the second isoform is down-regulated. Thus the net effect might be 0 but in fact both isoforms are differentially expressed. In this case, only conducting gene-level differential expression analyses will be misleading.
 
 To produce a list of differentially expressed isoforms by controlling the FDR at level 0.05, type the following commands:
 
@@ -320,9 +316,9 @@ To produce a list of differentially expressed isoforms by controlling the FDR at
 ../software/RSEM-1.2.25/rsem-control-fdr IsoMat.results 0.05 IsoMat.de.txt
 ```
 
-Because isoforms of a same gene normally share a significant portion of their sequences, the read mapping uncertainty increases dramatically here. Thus, the first command, `rsem-generate-ngvector` clusters isoform sequences into 3 categories according to each isoform's hardness of mapping reads uniquely. Then `EBSeq` will estimate mean and variance parameters separately for each category. You can find more details from the [EBSeq paper](http://bioinformatics.oxfordjournals.org/content/29/8/1035). The rest of commands are similar to those used in the gene-level analysis.
+Because isoforms of a same gene normally share a significant portion of their sequences, the read mapping uncertainty increases dramatically. Thus, the first command, `rsem-generate-ngvector` clusters isoform sequences into 3 clusters according to each isoform's hardness of being mapped uniquely. Then `EBSeq` estimates the mean and variance parameters separately for each cluster. You can find more details from the [EBSeq paper](http://bioinformatics.oxfordjournals.org/content/29/8/1035). The rest of commands are similar to those used in the gene-level analysis.
 
-Let us look at the top 10 differentially expressed isoforms in `IsoMat.de.txt`:
+Let us look at the first 10 differentially expressed isoforms in `IsoMat.de.txt`:
 
 ![Isoform level DE results](images/isoform_de.png)
 
