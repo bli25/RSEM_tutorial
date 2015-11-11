@@ -214,7 +214,7 @@ RSEM inferred that Ccl6-001 composes 31% of the Ccl6 gene in the transcriptome, 
 To generate the stacked transcript wiggle plots for Ccl6, type the following command:
 
 ```
-../software/RSEM-1.2.24/rsem-plot-transcript-wiggles --gene-list --show-unique \
+../software/RSEM-1.2.25/rsem-plot-transcript-wiggles --gene-list --show-unique \
 						     LPS_6h gene_ids.txt Ccl6_transcript_wiggle.pdf
 ```
 
@@ -227,7 +227,7 @@ In the generated figure (`Ccl6_transcript_wiggle.pdf`) shown below, black refers
 We can also visualize the read coverage and alignments information for gene Ccl6 in the genome. Let us first generate a genome-wide wiggle plot from the sorted RSEM genomic BAM file:
 
 ```
-../software/RSEM-1.2.24/rsem-bam2wig LPS_6h.genome.sorted.bam LPS_6h.wig LPS_6h
+../software/RSEM-1.2.25/rsem-bam2wig LPS_6h.genome.sorted.bam LPS_6h.wig LPS_6h
 ```
 
 Then you need to install the Integrative Genomic Viewer (IGV) from [here](http://www.broadinstitute.org/software/igv/). Once IGV is installed, we can load the mouse reference genome from the file `Mus_musculus.GRCm38.dna.toplevel.fa`, which locates at `ref` (shown below).
@@ -275,12 +275,12 @@ The single cell data listed in above consist of 6 samples in two conditions: 6h 
 
 ```
 unzip -u expression_levels_for_DE_analysis.zip
-../software/RSEM-1.2.24/rsem-generate-data-matrix LPS_6h.genes.results \
+../software/RSEM-1.2.25/rsem-generate-data-matrix LPS_6h.genes.results \
 						  LPS_6h_2.genes.results LPS_6h_3.genes.results \ 
 						  Unstimulated.genes.results Unstimulated_2.genes.results \
 						  Unstimulated_3.genes.results > GeneMat.txt
-../software/RSEM-1.2.24/rsem-run-ebseq GeneMat.txt 3,3 GeneMat.results
-../software/RSEM-1.2.24/rsem-control-fdr GeneMat.results 0.05 GeneMat.de.txt
+../software/RSEM-1.2.25/rsem-run-ebseq GeneMat.txt 3,3 GeneMat.results
+../software/RSEM-1.2.25/rsem-control-fdr GeneMat.results 0.05 GeneMat.de.txt
 ```
 
 In the above commands, `rsem-generate-data-matrix` extracts the estimated expected counts from each sample and then generates a count matrix `GeneMat.txt` that can be used by `EBSeq`. Then `rsem-run-ebseq` runs `EBSeq`. It takes as inputs the gene count matrix (`GeneMat.txt`), a comma-separated list of values representing the number of biological replicates each condition has (`3,3`), and outputs the results to `GeneMat.results`. Lastly, `rsem-control-fdr` selects a list of genes from `GeneMat.results` by controlling the false discovery rate (FDR) at level `0.05` and outputs them to `GeneMat.de.txt`.   
@@ -306,14 +306,14 @@ http://ghr.nlm.nih.gov/gene/ITGB2
 To produce a list of differentially expressed isoforms by controlling the FDR at level 0.05, type the following commands:
 
 ```
-../software/RSEM-1.2.24/rsem-generate-ngvector ../ref/mouse_ref.transcripts.fa mouse_ref
-../software/RSEM-1.2.24/rsem-generate-data-matrix LPS_6h.isoforms.results \
+../software/RSEM-1.2.25/rsem-generate-ngvector ../ref/mouse_ref.transcripts.fa mouse_ref
+../software/RSEM-1.2.25/rsem-generate-data-matrix LPS_6h.isoforms.results \
 						  LPS_6h_2.isoforms.results LPS_6h_3.isoforms.results \
 						  Unstimulated.isoforms.results Unstimulated_2.isoforms.results \
 						  Unstimulated_3.isoforms.results > IsoMat.txt
-../software/RSEM-1.2.24/rsem-run-ebseq --ngvector mouse_ref.ngvec \
+../software/RSEM-1.2.25/rsem-run-ebseq --ngvector mouse_ref.ngvec \
 				       IsoMat.txt 3,3 IsoMat.results
-../software/RSEM-1.2.24/rsem-control-fdr IsoMat.results 0.05 IsoMat.de.txt
+../software/RSEM-1.2.25/rsem-control-fdr IsoMat.results 0.05 IsoMat.de.txt
 ```
 
 Because isoforms of a same gene normally share a significant portion of their sequences, the read mapping uncertainty increases dramatically here. Thus, the first command, `rsem-generate-ngvector` clusters isoform sequences into 3 categories according to each isoform's hardness of mapping reads uniquely. Then `EBSeq` will estimate mean and variance parameters separately for each category. You can find more details from the [EBSeq paper](http://bioinformatics.oxfordjournals.org/content/29/8/1035). The rest of commands are similar to those used in the gene-level analysis.
@@ -344,7 +344,7 @@ To answer the first question, we need to assess the variablility of our expressi
 Type the following command to produce credibility intervals and CQV values for sample `LPS_6h`:
 
 ```
-../software/RSEM-1.2.24/rsem-calculate-expression -p 8 --paired-end \
+../software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 						  --bam --no-bam-output \
 						  --estimate-rspd \
 						  --calc-ci --single-cell-prior \
@@ -364,7 +364,7 @@ To answer the second question, we need to use RSEM's simulator. The simulator si
 As a first try, let us simulate 2 million reads using the following command:
 
 ```
-../software/RSEM-1.2.24/rsem-simulate-reads ../ref/mouse_ref LPS_6h.stat/LPS_6h.model \
+../software/RSEM-1.2.25/rsem-simulate-reads ../ref/mouse_ref LPS_6h.stat/LPS_6h.model \
 					    LPS_6h.isoforms.results 0.36 2000000 LPS_6h_sim_2M \
 					    --seed 0
 ```
@@ -376,7 +376,7 @@ When `rsem-simulate-reads` finishes, you should be able to find two FASTQ files 
 Let us run RSEM on the simulated data set by typing the following command:
 
 ```
-../software/RSEM-1.2.24/rsem-calculate-expression -p 8 --paired-end \
+../software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 						  --bowtie2 --bowtie2-path ../software/bowtie2-2.2.6 \
 						  --estimate-rspd \
 						  --no-bam-output \
