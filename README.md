@@ -182,7 +182,7 @@ The above `R` commands list the top 10 highest expressed genes (shown below). Am
 Then let us focus on the data statistics learned by RSEM. Quit `R` and type the following command in the terminal:
 
 ```
-../software/RSEM-1.2.24/rsem-plot-model LPS_6h LPS_6h_diagnostic.pdf
+../software/RSEM-1.2.25/rsem-plot-model LPS_6h LPS_6h_diagnostic.pdf
 ```
 
 Command `rsem-plot-model` plots the model statistics RSEM learned from the data. The resulting file, `LPS_6h_diagnostic.pdf` contains plots of learned fragment length distribution, read length distribution, read start position distribution, quality score information and alignment statistics. For example, the below figure shows the read start position distribution (RSPD) learned from the single cell data.
@@ -191,21 +191,21 @@ Command `rsem-plot-model` plots the model statistics RSEM learned from the data.
 
 RSPD partitions each transcript into 20 bins and counts the frequency of reads starting at each bin. By examing the above RSPD, we notice that there are biases toward the ends of transcripts. This is reasonable because the sample was prepared using Nextera<sup>TM</sup> transposons and it is known that these transposons are hard to reach the ends.
 
-The quality score plot is shown below. It plots the observed quality against the theoretical quality for each nucleotide and quality score. we observe that in general, sequencing error decreases as the quality score increases. In addition, the theoretical quality score is more optimistic than the actural quality learned from the data.
+The quality score plot (shown below) plots the observed quality against the theoretical quality score for each nucleotide. In general, sequencing error decreases as the quality score increases. However, the theoretical quality score is more optimistic than the observed quality learned from the data.
 
 ![Quality score plot](images/quality_score.png)
 
-The alignment statistics plot (shown below) is another interesting figure to look at. In this plot, unalignable reads, uniquely mapped reads, multi-mapping reads and reads filtered due to too many alignments are represented by colors of green, blue, grey and red. The x-axis of the histogram categorizes reads by their number of alignments to the transcript sequences. Then y-axis records the number of reads belonging to each category. We also have a pie chart at the top-right corner showing the percentages in the data for the previously described four types of reads. Based on the pie chart, we can see that there are much more multi-mapping reads (35%) than uniquely mapped reads (29%). 
+The alignment statistics plot (shown below) is another interesting figure to look at. In this plot, unalignable reads, uniquely mapped reads, multi-mapping reads and reads filtered due to too many alignments are represented by colors of green, blue, grey and red. The x-axis of the histogram bins reads by their number of transcript alignments. The y-axis counts the number of reads belonging to each bin. We also have a pie chart at the top-right corner showing the percentage of each type of read in the data. Based on the pie chart, there are much more multi-mapping reads (35%) than uniquely mapped reads (29%). 
 
 ![Alignment statistics plot](images/alignment_stat.png)
 
 ### Visualize the alignments
 
-Let us look at Ccl6, one of the top 10 expressed genes. This gene contains 3 isoforms: Ccl6-001, Ccl6-002, and Ccl6-003. Their splicing graphs are liste below (adopted from [here](http://uswest.ensembl.org/Mus_musculus/Location/View?db=core;g=ENSMUSG00000018927;r=11:83583216-83595066;t=ENSMUST00000138145)):
+Let us look at Ccl6, one of the top 10 highest expressed genes. This gene contains 3 isoforms: Ccl6-001, Ccl6-002, and Ccl6-003. Their splicing graphs are shown below (adopted from [here](http://uswest.ensembl.org/Mus_musculus/Location/View?db=core;g=ENSMUSG00000018927;r=11:83583216-83595066;t=ENSMUST00000138145)):
 
 ![Ccl6_splicing_graphs](images/Ccl6_splicing_graphs.png)
 
-In fact, it is very challenging to estimate isoform level expressions accurately for Ccl6 because Ccl6-002 is almost a subsequence of Ccl6-001 and Ccl6-003 also shares a portion of its sequences with Ccl6-001. We can find the following RSEM estimated isoform expression levels from `LPS_6h.isoforms.results`:
+It is very challenging to estimate isoform level expressions accurately for Ccl6 because Ccl6-002 is almost a subsequence of Ccl6-001 and Ccl6-003 also shares a significant portion of its sequence with Ccl6-001. We can find the following RSEM estimated isoform expression levels from `LPS_6h.isoforms.results`:
 
 ![Ccl6_isoforms](images/Ccl6_isoforms.png)
 
@@ -220,7 +220,7 @@ To generate the stacked transcript wiggle plots for Ccl6, type the following com
 
 Note that `gene_ids.txt` is already in the `exp` subdirectory and it contains the gene id of Ccl6.
 
-In the generated figure (`Ccl6_transcript_wiggle.pdf`) shown below, black refers to uniquely aligned reads and red refers to the expected weight from multi-mapping reads. We can easily see that there is no uniquely mapped reads in Ccl6-002. Then why did RSEM assign more weights to Ccl6-002 than Ccl6-001 in the shared region? The reason is that RSEM tries to match read depth between different regions of isoform Ccl6-001. Thus, it needs to move extra weights to Ccl6-002. Ccl6-003 is marked as not expressed because there is no reads aligned to it.  
+In the generated figure (`Ccl6_transcript_wiggle.pdf`) shown below, black refers to uniquely aligned reads and red refers to the expected depth from multi-mapping reads. We can easily see that there is no uniquely mapped reads in Ccl6-002. Then why did RSEM assign more weights to Ccl6-002 than Ccl6-001 in the shared region? The reason is that RSEM tries to match read depth between different regions of isoform Ccl6-001. Thus, it needs to move extra weights to Ccl6-002. Ccl6-003 is marked as not expressed because there is no reads aligned to it.  
 
 ![Ccl6_transcript_wiggle](images/Ccl6_transcript_wiggle.png)
 
