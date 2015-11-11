@@ -218,7 +218,7 @@ To generate the stacked transcript wiggle plots for Ccl6, type the following com
 						     LPS_6h gene_ids.txt Ccl6_transcript_wiggle.pdf
 ```
 
-Note that `gene_ids.txt` is already in the `exp` subdirectory and it contains the gene id of Ccl6.
+Note that `gene_ids.txt` is already in the `exp` subdirectory and it contains the gene identifier of Ccl6.
 
 In the generated figure (`Ccl6_transcript_wiggle.pdf`) shown below, black refers to uniquely aligned reads and red refers to the expected depth from multi-mapping reads. We can easily see that there is no uniquely mapped reads in Ccl6-002. Then why did RSEM assign more weights to Ccl6-002 than Ccl6-001 in the shared region? The reason is that RSEM tries to match read depth between different regions of isoform Ccl6-001. Thus, it needs to move extra weights to Ccl6-002. Ccl6-003 is marked as not expressed because there is no reads aligned to it.  
 
