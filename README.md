@@ -106,7 +106,7 @@ RSEM works with a set of transcripts, instead of a genome.  We have two ways to 
  software/RSEM-1.2.25/rsem-prepare-reference \
  					     --transcript-to-gene-map ref/mouse_ref_mapping.txt \
  					     --bowtie2 --bowtie2-path software/bowtie2-2.2.6 \
-					     ref/mouse_ref.fa ref/mouse_ref 
+					     ref/mouse_ref.fa ref/mouse_ref
  ```
 
 ## <a name="single"></a> Single Sample Analysis
@@ -118,7 +118,7 @@ Great. Now we are ready to play with some real data!
 First, please download this [file](https://www.dropbox.com/s/pxvokduywrul5nu/SRR937564.zip?dl=0) to your `data` subdirectory and unzip it:
 
 ```
-unzip data/SRR937564.zip
+unzip -d data data/SRR937564.zip
 ```
 
 It contains around 1 million 101bp-long paired-end reads sequenced from a single dendritic cell at 6h post-stimulation with LPS (Note: the original data file can be found at [here](http://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR937564)). 
@@ -126,7 +126,7 @@ It contains around 1 million 101bp-long paired-end reads sequenced from a single
 Then type the following command to run RSEM on this data set. I'll explain the meaning of each option/parameter later. 
 
 ```
-software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \				
+software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 					--bowtie2 --bowtie2-path software/bowtie2-2.2.6 \
 					--estimate-rspd \
 					--append-names \
@@ -276,7 +276,7 @@ The single cell data listed in above consist of 6 samples in two conditions: 6h 
 ```
 unzip -u expression_levels_for_DE_analysis.zip
 ../software/RSEM-1.2.25/rsem-generate-data-matrix LPS_6h.genes.results \
-						  LPS_6h_2.genes.results LPS_6h_3.genes.results \ 
+						  LPS_6h_2.genes.results LPS_6h_3.genes.results \
 						  Unstimulated.genes.results Unstimulated_2.genes.results \
 						  Unstimulated_3.genes.results > GeneMat.txt
 ../software/RSEM-1.2.25/rsem-run-ebseq GeneMat.txt 3,3 GeneMat.results
