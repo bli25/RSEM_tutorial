@@ -135,14 +135,15 @@ software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 					ref/mouse_ref exp/LPS_6h
 ```
 
-In the above command, `-p 8` tells RSEM to use 8 threads and `--paired-end` indicates that the input reads are paired-end. Then in the second line, we tell RSEM to align reads using Bowtie 2. We wonder if there is any sequencing bias and thus turn on the `--estimate-rspd` option. This option will learn from data how the reads are distributed across a transcript. The learned statistics can help us assess if any positional biases are shown in the data. By default, RSEM generates an annotated BAM file in transcript coordinates. Sometimes, we want the alignments in genomic coordinates instead. Thus, we turn on the `--output-genome-bam` option. Note that this option is only available when you build references from a genome. Then we provide RSEM with two FASTQ files, which contain the first and second mates of the paired-end reads. In the last line, we tell RSEM where the references locate and where to output the results.
+In the above command, `-p 8` tells RSEM to use 8 threads and `--paired-end` indicates the input reads are paired-end. In the second line, we tell RSEM to align reads using Bowtie 2, which is located at `software/bowtie2-2.2.6`. In the third line, we turn on the `--estimate-rspd` option because we wonder if there is any sequencing bias in the data. `--estimate-rspd` enabls RSEM to learn from data how the reads are distributed across a transcript. The learned statistics can help us assess if any positional biases are shown in the data. In the fourth line, `--append-names` tells RSEM to append gene_name/transcript_name to the result files. By default, RSEM generates an annotated BAM file in transcript coordinates. Sometimes, we want the alignments in genomic coordinates instead. Thus, we turn on the `--output-genome-bam` option in the fifth line. Note that this option is only available when you build references from a genome. Then in the sixth line, we provide RSEM with two FASTQ files, which contain the first and second mates of the paired-end reads. In the last line, we tell RSEM where the references locate and where to output the results.
 
-Because the reads are long (101bp), it might take a while for Bowtie 2 to align all reads. If you do not want to wait, you can download the Bowtie 2 alignments in BAM format from [here](https://www.dropbox.com/s/ulfpyi0qljv8vk4/LPS_6h.bam?dl=0) to subdirectory `exp`, and then type the following command to run RSEM:
+Because the reads are long (101bp), it might take a while for Bowtie 2 to align all reads. If you do not want to wait, you can download the [Bowtie 2 alignments in BAM format](https://www.dropbox.com/s/ulfpyi0qljv8vk4/LPS_6h.bam?dl=0) to subdirectory `exp`, and then type the following command to run RSEM:
 
 ```
-software/RSEM-1.2.24/rsem-calculate-expression -p 8 --paired-end \
+software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 					--bam \
 					--estimate-rspd \
+					--append-names \
 					--output-genome-bam \
 					exp/LPS_6h.bam \
 					ref/mouse_ref exp/LPS_6h
