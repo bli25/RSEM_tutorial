@@ -151,23 +151,23 @@ software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 
 Note that the `--bam` option tells RSEM the input is a BAM file, instead of a pair of FASTQ files.  
 
-When RSEM finishes running, You can find its outputs at the `exp` subdirectory. As shown in the snapshot below, all files share the prefix 'LPS_6h' in their names. Among the files, `LPS_6h.genes.results` and `LPS_6h.isoforms.results` contain the estimated gene and isoform level expressions. `LPS_6h.transcript.bam`, `LPS_6h.transcript.sorted.bam` and `LPS_6h.transcript.sorted.bam.bai` describe the annotated alignments in transcript coordinates. `LPS_6h.genome.bam`, `LPS_6h.genome.sorted.bam` and `LPS_6h.genome.sorted.bam.bai` describe the annotated alignments in genomic coordinates. `LPS_6h.stat` is a folder that contains model parameters learned from real data.
+When RSEM finishes, You can find its outputs at the `exp` subdirectory. As shown in the snapshot below, all files share the prefix 'LPS_6h' in their names. Among the files, `LPS_6h.genes.results` and `LPS_6h.isoforms.results` contain the estimated gene and isoform level expressions. `LPS_6h.transcript.bam`, `LPS_6h.transcript.sorted.bam` and `LPS_6h.transcript.sorted.bam.bai` describe the annotated alignments in transcript coordinates. `LPS_6h.genome.bam`, `LPS_6h.genome.sorted.bam` and `LPS_6h.genome.sorted.bam.bai` describe the annotated alignments in genomic coordinates. `LPS_6h.stat` is a folder that contains model parameters learned from the real data.
 
 ![RSEM results](images/result_files.png)
 
-You can find a detailed explanation of every output file at [here](http://deweylab.github.io/RSEM/rsem-calculate-expression.html#OUTPUT). In this tutorial, let us look at `LPS_6h.isoforms.results` and `LPS_6h.genome.sorted.bam` more closely. Below is a snippet of `LPS_6h.isoforms.results`:
+You can find a detailed explanation of each output file at [here](http://deweylab.github.io/RSEM/rsem-calculate-expression.html#OUTPUT). Let us look at `LPS_6h.isoforms.results` and `LPS_6h.genome.sorted.bam` more closely. Below is a snippet of `LPS_6h.isoforms.results`:
 
 ![Isoform result snippet](images/isoform_result_snippet.png)
 
-The first two columns of this file give the transcript ID and its parent gene's ID for each transcript. Note that you can find the transcript/gene name at the end of each ID. The sixth column gives the expression level for each isoform in TPM (Transcript per Million). TPM is a relative measure of expression levels. It represents the number of copies each isoform should have supposing the whole transcriptome contains exactly 1 million transcripts. The fifth column provides the expected read count in each transcript, which can be utilized by tools like [EBSeq](https://www.bioconductor.org/packages/release/bioc/html/EBSeq.html), [DESeq](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) for differential expression analysis. The format of gene level result file, `LPS_6h.genes.results`, is very similar.
+The first two columns of this file give the transcript ID and its parent gene's ID for each transcript. Note that you can find the transcript/gene name at the end of each ID. The sixth column gives the expression level for each isoform in TPM (Transcript per Million). TPM is a relative measure of expression levels. It represents the number of copies each isoform should have supposing the whole transcriptome contains exactly 1 million transcripts. The fifth column provides the expected read count in each transcript, which can be utilized by tools like [EBSeq](https://www.bioconductor.org/packages/release/bioc/html/EBSeq.html), [DESeq](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) and [edgeR](https://bioconductor.org/packages/release/bioc/html/edgeR.html) for differential expression analysis. The format of gene-level result file, `LPS_6h.genes.results`, is very similar.
 
-`LPS_6h.genome.sorted.bam` is mainly used for visualization. Each alignment in this file is sorted in ascending order by its chromosome name and genomic coordinate. Look at the snippet below, you can find each alignment is also annotated with a `ZW:f:value` field. The ZW field gives the posterior probability that this alignment is true. In addition, the MAPQ field (5th field) is calculated from the ZW value to reflect each alignment's confidence.   
+`LPS_6h.genome.sorted.bam` is mainly used for visualization. Each alignment in this file is sorted in ascending order by its chromosome name and genomic coordinate. Look at the snippet below, you can find each alignment is also annotated with a `ZW:f:value` field. The ZW field gives the posterior probability that this alignment is true. In addition, the MAPQ field (5th field) is re-calculated based on the ZW value to reflect RSEM's confidence on each alignment.
 
 ![Genome BAM snippet](images/genome_bam_snippet.png)
 
 ### Explore the data
 
-First, let us take a look at the most expressed genes. Please switch to the `exp` subdirectory by command `cd exp` and then type the following `R` commands:
+First, let us take a look at the highest expressed genes. Please switch to the `exp` subdirectory (`cd exp`) and type the following `R` commands:
 
 ```
 data = read.table("LPS_6h.genes.results", header=T, stringsAsFactors=F)
@@ -175,11 +175,11 @@ idx = order(data[,"TPM"], decreasing=T)
 data[idx[1:10], c("gene_id", "expected_count", "TPM")]
 ```
 
-The above `R` commands list the top 10 highest expressed genes (shown below). Among the list, we can find several immune system related genes, such as Lyz2, Ccl6, Ccl5, which reassure us that the data are produced from a bone-marrow-derived dendritic cell. 
+The above `R` commands list the top 10 highest expressed genes (shown below). Among the list, we can find several immune system related genes, such as Lyz2, Ccl6, Ccl5, which reassures us that the data are produced from a bone-marrow-derived dendritic cell. 
 
 ![Top 10 genes](images/top_10_genes.png)
 
-Then let us get a feel of the data using the RSEM-learned statistics. Quit `R` and type the following command in the terminal:
+Then let us focus on the data statistics learned by RSEM. Quit `R` and type the following command in the terminal:
 
 ```
 ../software/RSEM-1.2.24/rsem-plot-model LPS_6h LPS_6h_diagnostic.pdf
@@ -189,7 +189,7 @@ Command `rsem-plot-model` plots the model statistics RSEM learned from the data.
 
 ![Read start position distribution](images/rspd.png)
 
-RSPD partition each transcript into 20 bins and counts the frequency of reads starting at each bin. By examing the above RSPD, we notice that there are biases toward the ends of transcripts. This is reasonable because the sample was prepared using Nextera<sup>TM</sup> transposons and it is known that these transposons are hard to reach the ends.
+RSPD partitions each transcript into 20 bins and counts the frequency of reads starting at each bin. By examing the above RSPD, we notice that there are biases toward the ends of transcripts. This is reasonable because the sample was prepared using Nextera<sup>TM</sup> transposons and it is known that these transposons are hard to reach the ends.
 
 The quality score plot is shown below. It plots the observed quality against the theoretical quality for each nucleotide and quality score. we observe that in general, sequencing error decreases as the quality score increases. In addition, the theoretical quality score is more optimistic than the actural quality learned from the data.
 
