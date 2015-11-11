@@ -258,7 +258,7 @@ We can find that the shape of genomic wiggle plot is reversed. This is because C
 
 ## <a name="ebseq"></a> Differential Expression Analysis using EBSeq
 
-Differential expression analysis is one of the most common tasks biologists perform. The RSEM software includes the [EBSeq](https://www.bioconductor.org/packages/devel/bioc/html/EBSeq.html) package for downstream differential expression analysis. Let us play with the RSEM-EBSeq pipeline on some real single cell data sets.
+Differential expression analysis is one of the most common tasks biologists perform. The RSEM pipeline includes the [EBSeq](https://www.bioconductor.org/packages/devel/bioc/html/EBSeq.html) package for downstream differential expression analysis. Let us play with the RSEM-EBSeq pipeline on some real single cell data sets.
 
 ### Detecting differentially expressed genes
 
