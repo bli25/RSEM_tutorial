@@ -78,7 +78,7 @@ RSEM works with a set of transcripts, instead of a genome.  We have two ways to 
 
  ![RSEM references](images/ref_files.png)
 
- Let us take a closer look at `mouse_ref.transcripts.fa` (a snippet is shown below). It is a multi-FASTA file containing extracted sequences. For each sequence, the first line provides its identifier, which consists of its transcript_id and transcript_name, separated by an underscore. The second line provides the sequence itself.
+ Let us take a closer look at `mouse_ref.transcripts.fa` (a snippet is shown below). It is a multi-FASTA file containing extracted sequences. For each sequence, the first line provides its identifier and the second line provides its sequence.
 
  ![mouse_ref.transcripts.fa snippet](images/ref_fasta_snippet.png)
 
