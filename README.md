@@ -258,7 +258,7 @@ We can find that the shape of genomic wiggle plot is reversed. This is because C
 
 ## <a name="ebseq"></a> Differential Expression Analysis using EBSeq
 
-Differential expression analysis is one of the most common tasks biologists perform. The RSEM pipeline includes the [EBSeq](https://www.bioconductor.org/packages/devel/bioc/html/EBSeq.html) package for downstream differential expression analysis. Let us play with the RSEM-EBSeq pipeline on some real single cell data sets.
+Differential expression analysis is one of the most common tasks biologists perform. The RSEM pipeline includes [EBSeq](https://www.bioconductor.org/packages/devel/bioc/html/EBSeq.html) for downstream differential expression analysis. Let us try the RSEM-EBSeq pipeline on some real single cell data sets.
 
 ### Detecting differentially expressed genes
 
@@ -301,7 +301,11 @@ http://ghr.nlm.nih.gov/gene/ITGB2
 
 ### Detecting differentially expressed isoforms
 
-`EBSeq` can also be used to detect differentially expressed isoforms. Why are we interested in differentially expressed isoforms? Let us consider this conceptual example: Suppose we have a genes with two isoforms. Compared to the first condition, the first isoform is up-regulated and the second isoform is down-regulated. Thus the net effect might be 0 but in fact both isoforms are differentially expressed. In this case, only conducting gene-level differential expression analyses will be misleading.
+`EBSeq` can also detect differentially expressed isoforms.
+
+Why are we interested in differentially expressed isoforms?
+
+Let us consider this conceptual example: Suppose we have a genes with two isoforms. Compared to the first condition, the first isoform is up-regulated and the second isoform is down-regulated. Thus the net effect might be 0 but in fact both isoforms are differentially expressed. In this case, only conducting gene-level differential expression analyses will be misleading.
 
 To produce a list of differentially expressed isoforms by controlling the FDR at level 0.05, type the following commands:
 
