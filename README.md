@@ -334,7 +334,7 @@ It's easy to see that isoform `Galnt1-201` blurs the effect of isoform `Galnt1-0
 
 ## <a name="simulation"></a> Simulation
 
-In this section we will show you how to use RSEM's simulator to guide your design of sequencing experiments. Suppose that sample *LPS_6h* is from a plot project we have conducted and we are interested in gene `Cav2` because it is differentially expressed and supported by existing literature. We want to ask the following two questions:
+In this section we will show you how to use RSEM's simulator to guide your design of sequencing experiments. Suppose that sample *LPS_6h* is from a pilot project we have conducted and we are interested in gene `Cav2` because it is differentially expressed and supported by existing literature. We want to ask the following two questions:
 
 1. Have we sequenced deeply enough for `Cav2`?
 2. If not, how many reads do we need to sequence?
@@ -347,6 +347,7 @@ Type the following command to produce credibility intervals and CQV values for s
 ../software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 						  --bam --no-bam-output \
 						  --estimate-rspd \
+						  --append-names \
 						  --calc-ci --single-cell-prior \
 						  LPS_6h.bam ../ref/mouse_ref LPS_6h_ci
 ```
@@ -359,7 +360,7 @@ From `LPS_6h_ci.genes.results`, we can extract the following numbers for gene `C
 
 We can find that `Cav2`'s CQV on the TPM estimate is `0.0644385 > 0.05`, which means that we may need to sequence deeper.
 
-To answer the second question, we need to use RSEM's simulator. The simulator simulate RNA-Seq data based on parameters learned from the real data. Thus we may use the simulated data as a good surrogate. Our strategy is to simulate data at increasing depth and calculate the CQV from RSEM. Once the CQV is below 0.05, we find the right sequencing depth.
+To answer the second question, we need to use RSEM's simulator. The simulator simulate RNA-Seq data based on parameters learned from the real data. Thus we may use the simulated data as a good surrogate. Our strategy is to simulate data at increasing depth and calculate the CQV using RSEM. Once the CQV is below 0.05, we find the right sequencing depth.
 
 As a first try, let us simulate 2 million reads using the following command:
 
@@ -369,16 +370,17 @@ As a first try, let us simulate 2 million reads using the following command:
 					    --seed 0
 ```
 
-The first argument of `rsem-simulate-reads, `../ref/mouse_ref` tells RSEM where the reference is. Then the second and third arguments, `LPS_6h.stat/LPS_6h.model` and `LPS_6h.isoforms.results` provides the learned sequencing error model and estimated expression levels from real data. The next argument, `0.36`, specifies portion of reads that come from background noise. The first item at the third line of `LPS_6h.stat/LPS_6h.theta` provides an estimate of this portion. Then you specify the number of reads to be simulated, `2000000`, and the output name, `LPS_6h_sim_2M`. Lastly, option `--seed 0` provides RSEM a seed to initialize the random number generator. We set this option to make sure the simulation is replicable. 
+The first argument of `rsem-simulate-reads`, `../ref/mouse_ref`, tells RSEM where the reference is. Then the second and third arguments, `LPS_6h.stat/LPS_6h.model` and `LPS_6h.isoforms.results`, provide the learned sequencing error model and estimated expression levels from real data. The next argument, `0.36`, specifies portion of reads that come from background noise. The first item at the third line of `LPS_6h.stat/LPS_6h.theta` provides an estimate of this portion. Then you specify the number of reads to be simulated, `2000000`, and the output name, `LPS_6h_sim_2M`. Lastly, option `--seed 0` provides RSEM a seed to initialize the random number generator. We set this option to make sure the simulation is replicable. 
 
 When `rsem-simulate-reads` finishes, you should be able to find two FASTQ files containing the simulated reads: `LPS_6h_sim_2M_1.fq` and `LPS_6h_sim_2M_2.fq`.
 
-Let us run RSEM on the simulated data set by typing the following command:
+Then we can run RSEM on the simulated data set by typing the following command:
 
 ```
 ../software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 						  --bowtie2 --bowtie2-path ../software/bowtie2-2.2.6 \
 						  --estimate-rspd \
+						  --append-names \
 						  --no-bam-output \
 						  --calc-ci --single-cell-prior \
 						  LPS_6h_sim_2M_1.fq LPS_6h_sim_2M_2.fq \
@@ -389,20 +391,4 @@ Again, we extract the following numbers for gene `Cav2`, from `LPS_6h_sim_2M.gen
 
 ![CQV values for Cav2, 2M simulated data](images/cqv_cav2_sim.png)
 
-We can find now `Cav2`'s CQV becomes `0.0476313 < 0.05`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+We can find now `Cav2`'s CQV becomes `0.0476313 < 0.05`, which means 2M reads is a good sequencing depth for us.
