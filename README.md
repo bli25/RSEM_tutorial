@@ -1,6 +1,6 @@
 # A Short Tutorial for RSEM
 
-[Bo Li](http://bli25ucb.github.io/)
+[Bo Li](https://lilab-bcb.github.io/)
 
 * * *
 
@@ -82,7 +82,7 @@ RSEM works with a set of transcripts, instead of a genome.  We have two ways to 
 
  ![mouse_ref.transcripts.fa snippet](images/ref_fasta_snippet.png)
 
- If you want to skip the reference building step, you can download the [prebuilt references](https://www.dropbox.com/s/lixp07odna0wpxn/mouse_ref.tar.gz?dl=0) to `ref` and untar it by typing:
+ If you want to skip the reference building step, you can download the [prebuilt references](https://www.dropbox.com/s/kdj1ydciq5spgll/mouse_ref.tar.gz?dl=0) to `ref` and untar it by typing:
 
  ```
  tar -C ref -xzf ref/mouse_ref.tar.gz
@@ -90,13 +90,13 @@ RSEM works with a set of transcripts, instead of a genome.  We have two ways to 
 
 2. Building references from a set of transcripts. If we only have a *de novo* assembled transcriptome, we have to build references directly from transcripts. In this case, if we want to quantify gene-level expression, we need to provide RSEM a map from isoforms to genes using the `--transcript-to-gene-map` option. RSEM is also able to quantify allele-specific expression. To quantify allele-specific expression, we need to build RSEM references from phased sequences and provide RSEM a map from phased haplotypes to isoforms and then to genes using the `--allele-to-gene-map` option.
 
- Download [mouse transcripts and the associated mapping file](https://www.dropbox.com/s/ie67okalzaw8zzj/mouse_ref_building_from_transcripts.tar.gz?dl=0) to `ref`, and untar the tarball by
+ Download [mouse transcripts and the associated mapping file](https://www.dropbox.com/s/387tw1so8uua06p/mouse_ref_building_from_transcripts.tar.gz?dl=0) to `ref`, and untar the tarball by
 
  ```
  tar -C ref -xzf ref/mouse_ref_building_from_transcripts.tar.gz
  ```
 
- You should see two files: `mouse_ref.fa` and `mouse_ref_mapping.txt`. `mouse_ref.fa` is a multi-FASTA file containing all Ensembl mouse transcripts. Each transcript's identifier is a concatenation of its transcript_id and transcript_name (separated by a '_' sign). `mouse_ref_mapping.txt` is a mapping from transcripts to genes. As shown in the snippet below, each line of the mapping file contains a gene identifier and a transcript identifier.
+ You should see two files: `mouse_ref.fa` and `mouse_ref_mapping.txt`. `mouse_ref.fa` is a multi-FASTA file containing all Ensembl mouse transcripts. Each transcript's identifier is a concatenation of its transcript_id and transcript_name (separated by `_`). `mouse_ref_mapping.txt` is a mapping from transcripts to genes. As shown in the snippet below, each line of the mapping file contains a gene identifier and a transcript identifier.
 
  ![mouse_ref_mapping.txt snippet](images/ref_mapping_snippet.png)
 
@@ -115,7 +115,7 @@ RSEM works with a set of transcripts, instead of a genome.  We have two ways to 
 
 Great. Now we are ready to play with some real data!
 
-First, please download this [file](https://www.dropbox.com/s/pxvokduywrul5nu/SRR937564.zip?dl=0) to your `data` subdirectory and unzip it:
+First, please download this [file](https://www.dropbox.com/s/6ci8ugcxmfluj6h/SRR937564.zip?dl=0) to your `data` subdirectory and unzip it:
 
 ```
 unzip -d data data/SRR937564.zip
@@ -137,7 +137,7 @@ software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
 
 In the above command, `-p 8` tells RSEM to use 8 threads and `--paired-end` indicates the input reads are paired-end. In the second line, we tell RSEM to align reads using Bowtie 2, which is located at `software/bowtie2-2.2.6`. In the third line, we turn on the `--estimate-rspd` option because we wonder if there is any sequencing bias in the data. `--estimate-rspd` enabls RSEM to learn from data how the reads are distributed across a transcript. The learned statistics can help us assess if any positional biases are shown in the data. In the fourth line, `--append-names` tells RSEM to append gene_name/transcript_name to the result files. By default, RSEM generates an annotated BAM file in transcript coordinates. Sometimes, we want the alignments in genomic coordinates instead. Thus, we turn on the `--output-genome-bam` option in the fifth line. Note that this option is only available when you build references from a genome. Then in the sixth line, we provide RSEM with two FASTQ files, which contain the first and second mates of the paired-end reads. In the last line, we tell RSEM where the references locate and where to output the results.
 
-Because the reads are long (101bp), it might take a while for Bowtie 2 to align all reads. If you do not want to wait, you can download the [Bowtie 2 alignments in BAM format](https://www.dropbox.com/s/ulfpyi0qljv8vk4/LPS_6h.bam?dl=0) to subdirectory `exp`, and then type the following command to run RSEM:
+Because the reads are long (101bp), it might take a while for Bowtie 2 to align all reads. If you do not want to wait, you can download the [Bowtie 2 alignments in BAM format](https://www.dropbox.com/s/ot2ixo849oae45f/LPS_6h.bam?dl=0) to subdirectory `exp`, and then type the following command to run RSEM:
 
 ```
 software/RSEM-1.2.25/rsem-calculate-expression -p 8 --paired-end \
@@ -271,7 +271,7 @@ Unstimulated	| [SRR937920](http://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR9379
 Unstimulated_2	| [SRR937927](http://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR937927) | 1,526,289 | unstimulated
 Unstimulated_3	| [SRR937946](http://trace.ncbi.nlm.nih.gov/Traces/sra/?run=SRR937946) | 1,548,816 | unstimulated
 
-The single cell data listed in above consist of 6 samples in two conditions: 6h post-stimulation with LPS and unstimulated. Each condition contains 3 biological replicates. The first sample 'LPS_6h' is the one we have used in our previous analyses. Please download the [RSEM-estimated expression levels](https://www.dropbox.com/s/r9xrcxrzxfzwqqe/expression_levels_for_DE_analysis.zip?dl=0) for these 6 samples to subdirectory `exp`. Then type the following commands to detect differentially expressed genes:
+The single cell data listed in above consist of 6 samples in two conditions: 6h post-stimulation with LPS and unstimulated. Each condition contains 3 biological replicates. The first sample 'LPS_6h' is the one we have used in our previous analyses. Please download the [RSEM-estimated expression levels](https://www.dropbox.com/s/72s8ojt5fybptif/expression_levels_for_DE_analysis.zip?dl=0) for these 6 samples to subdirectory `exp`. Then type the following commands to detect differentially expressed genes:
 
 ```
 unzip -u expression_levels_for_DE_analysis.zip
